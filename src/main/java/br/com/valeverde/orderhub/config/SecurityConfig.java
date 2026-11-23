@@ -13,11 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * Autenticação HTTP Basic (API consumida pelo portal interno e por integrações).
- *
+ * <p>
  * Perfis:
- *  - ADMIN: acesso total;
- *  - SALES: clientes, catálogo (exceto exclusão de produtos), cupons e pedidos;
- *  - FINANCE: faturas, parcelas, pagamentos e relatórios.
+ * - ADMIN: acesso total;
+ * - SALES: clientes, catálogo (exceto exclusão de produtos), cupons e pedidos;
+ * - FINANCE: faturas, parcelas, pagamentos e relatórios.
  */
 @Configuration
 public class SecurityConfig {
@@ -25,19 +25,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .httpBasic(Customizer.withDefaults())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/reports/**").hasAnyRole("ADMIN", "FINANCE")
-                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
-                .requestMatchers("/api/products/**").hasAnyRole("ADMIN", "SALES")
-                .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
-                .requestMatchers("/api/customers/**", "/api/orders/**", "/api/coupons/**", "/api/categories/**")
-                    .hasAnyRole("ADMIN", "SALES")
-                .requestMatchers("/api/invoices/**", "/api/installments/**").hasAnyRole("ADMIN", "FINANCE")
-                .anyRequest().denyAll());
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/reports/**").hasAnyRole("ADMIN", "FINANCE")
+                        .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/products/**").hasAnyRole("ADMIN", "SALES")
+                        .requestMatchers("/api/customers/**", "/api/orders/**", "/api/coupons/**", "/api/categories/**")
+                        .hasAnyRole("ADMIN", "SALES")
+                        .requestMatchers("/api/invoices/**", "/api/installments/**").hasAnyRole("ADMIN", "FINANCE")
+                        .anyRequest().denyAll());
         return http.build();
     }
 
