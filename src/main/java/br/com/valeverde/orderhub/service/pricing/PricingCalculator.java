@@ -29,7 +29,7 @@ public class PricingCalculator {
 
         BigDecimal merchandise = subtotal.subtract(tierDiscount).subtract(couponDiscount);
 
-        BigDecimal shipping = merchandise.compareTo(properties.freeShippingThreshold()) > 0
+        BigDecimal shipping = merchandise.compareTo(properties.freeShippingThreshold()) >= 0
                 ? BigDecimal.ZERO.setScale(2)
                 : properties.shippingFee().setScale(2, RoundingMode.HALF_UP);
 
