@@ -1,0 +1,14 @@
+# Perfil de diagnóstico: ative com --spring.profiles.active=sql-debug
+# Exibe todo SQL emitido pelo Hibernate, os parâmetros vinculados e estatísticas por sessão.
+spring:
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.stat: DEBUG
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: INFO
